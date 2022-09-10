@@ -10,6 +10,7 @@ import android.text.Layout;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +32,10 @@ public class MainActivity extends AppCompatActivity {
     private ImageView case32;
     private ImageView case33;
 
+    private ImageView turnToImg;
+    private TextView winCroix;
+    private TextView winCercle;
+
     int intCase11 = 0;
     int intCase12 = 0;
     int intCase13 = 0;
@@ -40,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
     int intCase31 = 0;
     int intCase32 = 0;
     int intCase33 = 0;
+
+    int intCercleWin = 0;
+    int intCroixWin = 0;
 
     private boolean tour = false;
 
@@ -79,6 +87,12 @@ public class MainActivity extends AppCompatActivity {
         intCase32 = 0;
         intCase33 = 0;
 
+
+        winCercle = (TextView) findViewById(R.id.textScoreCercle);
+        winCercle.setText("Cercle : "+intCercleWin);
+        winCroix = (TextView) findViewById(R.id.textScoreCroix);
+        winCroix.setText("Croix : "+intCroixWin);
+
         bouttonRetour = (Button) findViewById(R.id.button_retour);
         bouttonRetour.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +108,9 @@ public class MainActivity extends AppCompatActivity {
                 run1vs1();
             }
         });
+
+        turnToImg = (ImageView) findViewById(R.id.imageTurnTo);
+        updateTurnTo();
 
         case11 = (ImageView) findViewById(R.id.imageCase11);
         case11.setOnClickListener(new View.OnClickListener() {
@@ -244,19 +261,28 @@ public class MainActivity extends AppCompatActivity {
         int d1 = intCase11 + intCase22 + intCase33;
         int d2 = intCase13 + intCase22 + intCase31;
 
-        if (h1 == 3 || h1 == -3){endGame();}
-        if (h2 == 3 || h2 == -3){endGame();}
-        if (h3 == 3 || h3 == -3){endGame();}
-        if (v1 == 3 || v1 == -3){endGame();}
-        if (v2 == 3 || v2 == -3){endGame();}
-        if (v3 == 3 || v3 == -3){endGame();}
-        if (d1 == 3 || d1 == -3){endGame();}
-        if (d2 == 3 || d2 == -3){endGame();}
+        if (h1 == 3 || h1 == -3){addScore(h1);endGame();}
+        if (h2 == 3 || h2 == -3){addScore(h2);endGame();}
+        if (h3 == 3 || h3 == -3){addScore(h3);endGame();}
+        if (v1 == 3 || v1 == -3){addScore(v1);endGame();}
+        if (v2 == 3 || v2 == -3){addScore(v2);endGame();}
+        if (v3 == 3 || v3 == -3){addScore(v3);endGame();}
+        if (d1 == 3 || d1 == -3){addScore(d1);endGame();}
+        if (d2 == 3 || d2 == -3){addScore(d2);endGame();}
 
         if (intCase11!=0 && intCase12!=0 && intCase13!=0 && intCase21!=0 && intCase22!=0 && intCase23!=0 && intCase31!=0 && intCase32!=0 && intCase33!=0){
             endGame();
         }
 
+    }
+
+    public void addScore(int i){
+        if (i == 3){
+            intCercleWin++;
+        }
+        else {
+            intCroixWin++;
+        }
     }
 
     public void endGame(){
@@ -277,6 +303,7 @@ public class MainActivity extends AppCompatActivity {
             imageView.setImageDrawable(drawable);
             tour = true;
         }
+        updateTurnTo();
     }
 
     public static Drawable setTint(Drawable d, int color) {
@@ -285,5 +312,17 @@ public class MainActivity extends AppCompatActivity {
         return wrappedDrawable;
     }
 
+    public void updateTurnTo(){
+        Drawable drawable;
+        if (tour){
+            drawable = getResources().getDrawable(R.drawable.case_cercle);
+            setTint(drawable, Color.RED);
+            turnToImg.setImageDrawable(drawable);
+        }else{
+            drawable = getResources().getDrawable(R.drawable.case_croix);
+            setTint(drawable, Color.BLUE);
+            turnToImg.setImageDrawable(drawable);
+        }
+    }
 
 }
